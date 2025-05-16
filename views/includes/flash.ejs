@@ -1,0 +1,44 @@
+<!-- SUCCESS Partials -->
+
+<% if(success && success.length) { %> 
+  <!-- 
+    The 'success' variable is set in middleware (res.locals.success) and is available in all EJS templates.
+    It is an array (from connect-flash), so we check if it exists and has length > 0 before displaying.
+  -->
+
+  <div class="alert alert-success alert-dismissible fade show alert-msg" role="alert">
+    <%= success %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+<% } %>
+
+<!-- FAILURE Partials -->
+
+<!--
+  Examples when error flash messages appear:
+  - Copying the URL of a listing and then deleting the listing, then visiting that URL.
+  - Editing a listing, leaving the form incomplete, then deleting the listing and revisiting the URL.
+  In such cases, user-friendly error messages are shown, set in the 'SHOW' & 'EDIT' routes of listings.
+-->
+
+<% if(error && error.length) { %> 
+  <div class="alert alert-danger alert-dismissible fade show alert-msg" role="alert">
+    <%= error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+
+<style>
+  .alert-msg {
+    width: 50%;             /* Suitable width for desktop view */
+    margin: 0 auto 0;       /* Center horizontally */
+  }
+
+  /* On smaller screens, increase width for better visibility */
+  @media (max-width: 600px) {
+    .alert-msg {
+      width: 90%;
+    }
+  }
+</style>

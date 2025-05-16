@@ -1,0 +1,42 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+    <div class="container my-5">
+        <h2 class="mb-4">🧳 Your Booked Trips</h2>
+      
+        <% if (bookings.length === 0) { %>
+          <div class="alert alert-info">You haven't booked any trips yet.</div>
+        <% } else { %>
+          <div class="row g-4">
+            <% bookings.forEach(booking => { %>
+              <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm border-0 rounded-4 h-100">
+                  <!-- Listing image -->
+                  <img src="<%= booking.listing.image.url %>" class="card-img-top rounded-top-4 h-50" alt="<%= booking.listing.title %>">
+      
+                  <!-- Listing info -->
+                  <div class="card-body">
+                    <h5 class="card-title"><%= booking.listing.title %></h5>
+                    <p class="card-text text-muted">
+                      <i class="fa-solid fa-location-dot"></i> <%= booking.listing.location %>
+                    </p>
+      
+                    <p class="card-text">
+                      <strong>📅 Trip Dates:</strong><br>
+                      <%= new Date(booking.dateRange.start).toLocaleDateString('en-GB') %> →
+                      <%= new Date(booking.dateRange.end).toLocaleDateString('en-GB') %>
+                    </p>
+                    
+                    <!-- Payment Info -->
+                    <p class="card-text mb-0">
+                      <strong>💳 Payment:</strong> <%= booking.paymentInfo.status === "Success" ? "✅ Paid" : "❌ Failed" %>
+                    </p>
+                    <small class="text-muted">Order ID: <%= booking.paymentInfo.orderId %></small>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+      
+</body>

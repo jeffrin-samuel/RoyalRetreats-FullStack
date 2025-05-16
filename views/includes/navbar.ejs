@@ -1,0 +1,141 @@
+<style>
+  .btn-search{
+    background-color: #fe424d;
+    color:white;
+    border-radius: 25px;
+    padding: 0 1rem 0 1rem;  /* Top Right Bottom Left  */
+  }
+
+  .btn:hover{
+    background-color: #fe424d;
+    color:white;
+  }
+
+  .btn-search i{ 
+    display:inline; /* To display icon + "search" in same line  */
+    margin-right:0.5rem;
+  }
+
+  .search-inp{
+    border-radius: 25px;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+  }
+
+.dropdown-menu {
+  border-radius: 15px;
+  min-width: 200px;
+}
+
+.dropdown-menu li {
+  margin-bottom: 5px;
+}
+
+.navbar-toggler {
+  transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-toggler:active {
+  background-color: #fe424d;
+  transform: scale(1.1);
+  opacity: 0.7;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 991.98px) {
+  #navbarNav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white; 
+    z-index: 1050; /* high enough to overlay content */
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+
+</style>
+
+
+
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+
+    <div class="container-fluid searchtest">
+
+      <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass fa-spin"></i></a> 
+<!--Using font-awesome compass icon and when clicked on it, it should be redirected to home page-->
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="#navbarNav"> 
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/listings">Explore</a> 
+          </li>
+        </ul>
+       
+      </div>
+
+
+
+      <div class="navbar-nav ms-5">
+        <form class="d-flex test" method="GET" action="/listings">
+          <input 
+          class="form-control mr-sm-2 search-inp" 
+          type="search" 
+          name="query"     
+          placeholder="Search" 
+          aria-label="Search">    
+
+
+          <button class="btn btn-search my-2 my-sm-0 ms-2" type="submit" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+          <!--It's a good practice to mention type="submit" in case of buttons -->
+        </form>
+      </div>
+
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+
+        <li class="nav-item">
+          <a class="nav-link" href="/listings/new">Airbnb your home</a>  
+        </li>
+
+          <li class="nav-item">
+
+            <% if(!currUser){ %>  <!--If user is logged in-->
+
+            <a class="nav-link" href="/signup"><b>Sign Up</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login"><b>Login</b></a> 
+          </li>
+          <% } %>
+
+          <% if (currUser) { %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-circle" style="font-size: 1.5rem;"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                <li><a class="dropdown-item" href="/booked-trips">Trips Booked</a></li>
+                <li><a class="dropdown-item" href="/wishlists">Wishlists</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+              </ul>
+            </li>
+          <% } %>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+

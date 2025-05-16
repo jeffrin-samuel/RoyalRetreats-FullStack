@@ -1,0 +1,88 @@
+<% layout("/layouts/boilerplate") %>
+
+
+<style>
+    body {
+      background: #f7f7f7;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 20px;
+      max-width: 600px;
+      margin: 5rem auto;
+      padding: 3rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border: 3px solid #fe424d;
+      padding: 5px;
+      background-color: #fff;
+    }
+
+    .user-name {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .user-email {
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-group-custom a {
+      margin: 0.4rem;
+      border-radius: 25px;
+      padding: 0.6rem 1.2rem;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: #777;
+      margin-top: 0.5rem;
+    }
+
+    .highlight {
+      color: #fe424d;
+      font-weight: bold;
+    }
+  </style>
+
+
+
+
+
+<body>
+
+  <div class="profile-card">
+    <img 
+      src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f464.png" 
+      alt="User Icon" 
+      class="profile-pic"
+    >
+
+    <div class="user-name">Hi, <span class="highlight"><%= currUser.username %></span> 👋</div>
+    <div class="user-email"><%= currUser.email %></div>
+    <div class="tagline">Welcome to your dashboard — manage your travel plans here.</div>
+
+    <div class="btn-group-custom mt-4">
+      <a href="/booked-trips" class="btn btn-outline-primary">Your Trips</a>
+      <a href="/wishlists" class="btn btn-outline-success">Wishlists</a>
+      <a href="/profile/edit" class="btn btn-outline-dark">Edit Profile</a>
+      <a href="/logout" class="btn btn-outline-danger">Logout</a>
+    </div>
+  </div>
+
+</body>
+
+
+

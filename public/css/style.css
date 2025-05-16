@@ -1,0 +1,251 @@
+/* Custom overrides for Bootstrap styles */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar {
+    height: 5rem;
+    background-color: white;
+}
+
+.fa-compass {
+    color: #fe424d;
+    font-size: 2rem;
+}
+
+.nav-link {
+    color: #222222 !important;
+}
+
+/* Footer */
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+}
+
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+
+.f-info-links,
+.f-info-socials,
+.f-info-brand {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.f-info-socials i {
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.f-info {
+    text-align: center;
+    height: 8rem;
+    flex-wrap: wrap;
+    background-color: #ebebeb;
+    display: flex;
+    justify-content: center;
+    align-items: space-evenly;
+}
+
+/* Cards */
+.listing-card {
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top {
+    border-radius: 1rem !important;
+    width: 100%;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 0 !important;
+}
+
+.card-text p {
+    font-weight: 400;
+}
+
+.listing-link {
+    text-decoration: none;
+}
+
+/* Card hover effect */
+.card-img-overlay {
+    opacity: 0;
+}
+
+.card-img-overlay:hover {
+    opacity: 0.2;
+    background-color: white;
+}
+
+/* Button containers */
+.btns {
+    display: flex;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #listings {
+        flex-wrap: wrap;
+    }
+
+    #search-btn {
+        width: 190px;
+        height: 40px;
+        font-size: 12px;
+    }
+
+    #filters {
+        flex-wrap: wrap;
+        display: flex;
+    }
+
+    #no-listing {
+        margin-bottom: 120px;
+    }
+
+    .offset-3 {
+        margin-left: 3px !important;
+    }
+
+    #show-img {
+        width: 100%;
+    }
+
+    body {
+        overflow-x: hidden !important;
+    }
+
+    .container,
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+        overflow-x: hidden;
+    }
+
+    .card {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    #show-title {
+        width: 350px;
+    }
+
+  #wishlist-btn {
+    padding: 9px 15px 9px !important;
+    white-space: nowrap;
+  }
+
+    #review-section {
+        width: 100%;
+    }
+
+    #comments {
+        width: 300px;
+        margin-left: 2px;
+    }
+
+    .offset-2 {
+        margin-left: 3px !important;
+        width: 100% !important;
+    }
+
+    .searchtest {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+        width: 100% !important;
+    }
+
+    .navbar-toggler {
+        order: 3 !important;
+        margin-left: auto !important;
+    }
+
+    .navbar-brand {
+        order: 1 !important;
+    }
+
+    .navbar-nav.ms-5 {
+        order: 2 !important;
+        flex: 1 1 auto !important;
+        margin-left: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+
+    .navbar-nav.ms-5 form.d-flex {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .search-inp {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+
+    #search-btn {
+        white-space: nowrap !important;
+        padding: 5px 10px !important;
+        font-size: 12px !important;
+        margin-left: 8px !important;
+    }
+
+    .searchtest input[type="search"] {
+        padding: 4px 38px;
+    }
+
+    #search-btn {
+        font-size: 12px;
+        padding: 4px 5px;
+        height: 30px;
+        width: 40%;
+        margin-right: 3px;
+    }
+
+    #listing-detail p {
+    margin-bottom:4px !important;
+  }
+
+}
+
+/* For very small screens */
+@media (max-width: 365px) {
+  #listing-detail {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 4px;
+  }
+
+  #wishlist-btn {
+    padding: 9px 15px 9px !important;
+    white-space: nowrap;
+  }
+
+  #listing-detail p {
+    margin-bottom:4px !important;
+  }
+}

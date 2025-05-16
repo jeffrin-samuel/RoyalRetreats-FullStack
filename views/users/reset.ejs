@@ -1,0 +1,18 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4"> 
+  <div class="col-6 offset-2"> 
+    <h1>Reset Password</h1>
+
+    <form method="POST" action="/login/reset" class="mt-4 needs-validation" novalidate>
+      
+      <div class="mb-3">
+        <label for="email" class="form-label">Enter your email</label>
+        <input id="email" name="email" type="email" class="form-control" required />
+        <div class="invalid-feedback">Please enter a valid email</div>
+      </div>
+
+      <button class="btn btn-primary">Send OTP</button>
+    </form>
+  </div>
+</div>

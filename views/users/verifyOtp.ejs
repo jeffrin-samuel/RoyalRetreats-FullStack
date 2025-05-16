@@ -1,0 +1,17 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-4"> 
+  <div class="col-6 offset-2"> 
+    <h1>Verify OTP</h1>
+
+    <form method="POST" action="/login/reset/verify" class="mt-4 needs-validation" novalidate>
+
+      <div class="mb-3">
+        <label for="otp" class="form-label">Enter OTP sent to your email</label>
+        <input id="otp" name="otp" type="text" class="form-control" required />
+      </div>
+
+      <button class="btn btn-warning">Verify</button>
+    </form>
+  </div>
+</div>
