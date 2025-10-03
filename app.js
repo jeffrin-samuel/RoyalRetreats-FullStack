@@ -37,6 +37,16 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.engine("ejs", ejsMate);
 
+const { testSMTP } = require("./smtp-test");
+
+app.get("/test-smtp", async (req, res) => {
+  try {
+    await testSMTP();
+    res.send("✅ SMTP connection successful");
+  } catch (err) {
+    res.send("❌ SMTP connection failed: " + err.message);
+  }
+});
 
 const store = MongoStore.create({
     mongoUrl:dbUrl,
