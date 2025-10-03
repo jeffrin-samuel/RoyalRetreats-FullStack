@@ -4,13 +4,21 @@ const net = require("net");
 const host = "smtp.gmail.com";
 const port = 587;
 
-console.log(`Trying to connect to ${host}:${port}...`);
+async function testSMTP() {
+  return new Promise((resolve, reject) => {
+    console.log(`Trying to connect to ${host}:${port}...`);
 
-const socket = net.createConnection(port, host, () => {
-  console.log(`✅ Connected to ${host}:${port}`);
-  socket.end();
-});
+    const socket = net.createConnection(port, host, () => {
+      console.log(`✅ Connected to ${host}:${port}`);
+      socket.end();
+      resolve("✅ Connected");
+    });
 
-socket.on("error", (err) => {
-  console.error(`❌ Cannot connect to ${host}:${port} ->`, err.message);
-});
+    socket.on("error", (err) => {
+      console.error(`❌ Cannot connect to ${host}:${port} ->`, err.message);
+      reject(err);
+    });
+  });
+}
+
+module.exports = { testSMTP };
