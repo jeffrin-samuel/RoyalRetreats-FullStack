@@ -219,6 +219,9 @@ module.exports.verifyPayment = async (req, res) => {
 
     await user.save();
 
+/* Send payment success email only in non-production environments 
+   to prevent SMTP errors on Render caused by restricted email ports */
+  if(process.env.NODE_ENV != "production"){
     await sendPaymentSuccessEmail(
       user.email,
       {
@@ -234,6 +237,7 @@ module.exports.verifyPayment = async (req, res) => {
       startDate,
       endDate
     );
+  }
 
     req.flash("success", "Payment successful!");
     return res.json({ success: true, redirectUrl: "/booked-trips" });

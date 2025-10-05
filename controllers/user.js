@@ -63,7 +63,11 @@ module.exports.signup = async (req, res) => {
         const newUser = new User({ username, email });
         const registeredUser = await User.register(newUser, password);
 
+    /* Send welcome email only in non-production environments (eg. localhost) 
+   to avoid SMTP/port issues on Render during deployment */
+        if(process.env.NODE_ENV != "production"){
         await sendWelcomeEmail(registeredUser.email);
+        }
 
         req.login(registeredUser, (err) => {
             if (err) return next(err);
