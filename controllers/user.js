@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const User = require("../models/user.js");
 const mongoose = require("mongoose");
 
@@ -158,10 +160,20 @@ module.exports.sendResetOtp = async (req, res) => {
         user.resetOtpExpireAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour expiry
 
         await user.save();
-        await sendResetPassword(user.email, otp);
 
+/* Intentionally skip sending OTP email in production due to SMTP port restrictions on Render.
+   The OTP is still generated and saved in the database so the user can use it once email
+   functionality becomes available or is tested locally. */
+
+        if(process.env.NODE_ENV == "production"){
+          req.flash("error","User exists! OTP generated but email could not be sent due to server restrictions");
+          return res.redirect("/login/reset");
+        }
+
+        await sendResetPassword(user.email, otp);
         req.flash("success", "OTP sent to your email!");
         res.redirect("/login/reset/verify");
+
     } catch (err) {
         console.error(err);
         req.flash("error", "Error sending OTP.");
