@@ -3,94 +3,57 @@
 
 <style>
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #f7f7f7;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      min-height: 100vh;
     }
 
     .profile-card {
       background: white;
       border-radius: 20px;
-      max-width: 650px;
+      max-width: 600px;
       margin: 5rem auto;
       padding: 3rem;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
       text-align: center;
     }
 
     .profile-pic {
-      width: 140px;
-      height: 140px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 1.5rem;
-      border: 4px solid #667eea;
-      background: #f7fafc;
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      margin-bottom: 1rem;
+      border: 3px solid #fe424d;
+      padding: 5px;
+      background-color: #fff;
     }
 
     .user-name {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 600;
-      color: #2d3748;
-      margin-bottom: 0.5rem;
+      color: #333;
     }
 
-    .user-info {
-      color: #718096;
-      font-size: 1rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .hospital-id {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 0.6rem 1.5rem;
-      border-radius: 25px;
-      display: inline-block;
-      margin: 1.5rem 0;
-      font-weight: 600;
-      font-size: 0.95rem;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .btn-group-custom {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      margin-top: 2rem;
+    .user-email {
+      color: #555;
+      margin-bottom: 1.5rem;
     }
 
     .btn-group-custom a {
-      border-radius: 12px;
-      padding: 0.8rem 1rem;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-
-    .btn-group-custom a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      margin: 0.4rem;
+      border-radius: 25px;
+      padding: 0.6rem 1.2rem;
     }
 
     .tagline {
-      font-size: 1rem;
-      color: #a0aec0;
+      font-size: 1.1rem;
+      color: #777;
       margin-top: 0.5rem;
-      font-style: italic;
     }
 
     .highlight {
-      color: #667eea;
+      color: #fe424d;
       font-weight: bold;
-    }
-
-    .divider {
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
-      margin: 2rem 0;
     }
   </style>
 
@@ -101,34 +64,25 @@
 <body>
 
   <div class="profile-card">
-    <!-- Professional Avatar Image -->
     <img 
-      src="https://ui-avatars.com/api/?name=<%= currUser.username %>&size=140&background=667eea&color=fff&bold=true&rounded=true" 
-      alt="Profile Picture" 
+      src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f464.png" 
+      alt="User Icon" 
       class="profile-pic"
     >
 
     <div class="user-name">Hi, <span class="highlight"><%= currUser.username %></span> 👋</div>
-    <div class="user-info">📧 <%= currUser.email %></div>
-    <div class="hospital-id">🏥 Hospital ID: <%= currUser.hospitalId %></div>
-    <div class="tagline">"Welcome to MediTrack — manage patient records efficiently"</div>
+    <div class="user-email"><%= currUser.email %></div>
+    <div class="tagline">Welcome to your dashboard — manage your travel plans here.</div>
 
-    <div class="divider"></div>
-
-    <div class="btn-group-custom">
-      <a href="/patients" class="btn btn-primary">
-        📋 Patient Records
-      </a>
-      <a href="/appointments" class="btn btn-success">
-        📅 Appointments
-      </a>
-      <a href="/profile/edit" class="btn btn-secondary">
-        ✏️ Edit Profile
-      </a>
-      <a href="/logout" class="btn btn-danger">
-        🚪 Logout
-      </a>
+    <div class="btn-group-custom mt-4">
+      <a href="/booked-trips" class="btn btn-outline-primary">Your Trips</a>
+      <a href="/wishlists" class="btn btn-outline-success">Wishlists</a>
+      <a href="/profile/edit" class="btn btn-outline-dark">Edit Profile</a>
+      <a href="/logout" class="btn btn-outline-danger">Logout</a>
     </div>
   </div>
 
 </body>
+
+
+

@@ -1,0 +1,156 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center; /* Vertically center child elements */
+  }
+
+  .filter {
+    text-align: center;  /* Center icons and text */
+    margin-right: 2rem;
+    margin-top: 1rem;
+    opacity: 0.7;
+  }
+
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  .filter p {
+    font-size: 0.8rem;
+  }
+
+  .filter a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit color from parent */
+  }
+
+  .tax-info {
+    display: none;
+    /* display:none hides element and removes space,
+       unlike visibility:hidden which hides but keeps space */
+  }
+
+  .tax-toggle {
+    width: 190px;
+    height: 40px;
+    border: 1px solid black;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  #filters.row {
+    gap: 5px; /* Reduce spacing between items */
+  }
+
+  .filter-icon {
+    font-size: 14px; /* Decrease icon size */
+  }
+
+  #filters.row > * {
+    flex: 1 1 auto;
+  }
+
+  #filters {
+    flex-wrap: wrap;
+  }
+
+  .drop-menu {
+    padding-bottom: 10px;
+  }
+</style>
+
+<body>
+
+  <div id="filters" class="row">
+    <!-- Filters are responsive with Bootstrap grid classes -->
+
+    <div class="col-lg-1 col-md-2 col-sm-3 col-4 filter">
+      <div><i class="fa-solid fa-fire"></i></div>
+      <a href="/listings?category=Villas"><p>Trending</p></a>
+    </div>
+
+    <div class="col-lg-1 col-md-2 col-sm-3 col-4 filter">
+      <div><i class="fa-solid fa-bed"></i></div>
+      <a href="/listings?category=Rooms"><p>Rooms</p></a>
+    </div>
+
+    <div class="col-lg-1 col-md-2 col-sm-3 col-4 filter">
+      <div><i class="fa-solid fa-city"></i></div>
+      <a href="/listings?category=Cities"><p>Iconic cities</p></a>
+    </div>
+
+    <div class="col-lg-1 col-md-2 col-sm-3 col-4 filter">
+      <div><i class="fa-solid fa-mountain-sun"></i></div>
+      <a href="/listings?category=Mountains"><p>Mountains</p></a>
+    </div>
+
+    <div class="col-lg-1 col-md-2 col-sm-3 col-4 filter">
+      <div><i class="fa-solid fa-cow"></i></div>
+      <a href="/listings?category=Farms"><p>Farms</p></a>
+    </div>
+
+    <div class="col-lg-1 col-md-2 col-sm-3 col-4 filter">
+      <div><i class="fa-solid fa-snowflake"></i></div>
+      <a href="/listings?category=Arctic"><p>Arctic</p></a>
+    </div>
+
+    <div class="col-lg-1 col-md-2 col-sm-3 col-4 filter" id="camping">
+      <div><i class="fa-solid fa-campground"></i></div>
+      <a href="/listings?category=Camping"><p>Camping</p></a>
+    </div>
+
+    <!-- Price dropdown menu -->
+    <div class="col-lg-1 col-md-2 col-sm-3 col-4 filter mb-4 drop-menu">
+      <div class="dropdown">
+        <button class="btn btn-filter dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-solid fa-indian-rupee-sign"></i>
+          <p class="d-inline">Price</p>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="?price=0-1000">< ₹1000 / night</a></li>
+          <li><a class="dropdown-item" href="?price=1000-2000">₹1000 - ₹2000 / night</a></li>
+          <li><a class="dropdown-item" href="?price=3000-4000">₹3000 - ₹4000 / night</a></li>
+          <li><a class="dropdown-item" href="?price=4000-5000">₹4000 - ₹5000 / night</a></li>
+          <li><a class="dropdown-item" href="?price=5000-999999">₹5000+ / night</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div> <!-- End of filters -->
+
+  <% if (!hasListings) { %>
+    <div class="text-center mt-5" id="no-listing">
+      <i class="fas fa-exclamation-circle text-danger fa-2x"></i>
+      <p class="mt-3 fw-bold text-secondary" style="font-size: 1.1rem;">
+        Oops! No listings available for this category.
+      </p>
+      <a href="/listings" class="btn btn-oops btn-primary mt-2">Home Page</a>
+    </div>
+  <% } %>
+
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3" id="listings">
+    <!-- Responsive card grid for listings -->
+
+    <% for(let listing of allListings){ %>
+      <a href="/listings/<%=listing._id%>" class="listing-link">
+        <div class="card listing-card">
+          <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem;">
+          <div class="card-img-overlay"></div>
+          <div class="card-body">
+            <p class="card-text">
+              <b><%=listing.title%></b><br>
+              &#8377; <%=listing.price.toLocaleString("en-IN") %> / night
+            </p>
+          </div>
+        </div>
+      </a>
+    <% } %>
+
+  </div>
+
+</body>

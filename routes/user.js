@@ -47,7 +47,7 @@ router.post("/listings/:id/wishlists", isLoggedIn, isNotListingOwner, wrapAsync(
 
 // Sign Up
 router.get("/signup", userController.renderSignupForm);
-router.post("/signup", wrapAsync(userController.signup));
+router.post("/signup", validateSignUpForm, wrapAsync(userController.signup));
 
 // Login
 router.get("/login", userController.renderLoginForm);
@@ -92,5 +92,12 @@ router.get("/login/reset/new", userController.renderNewPassForm);
 
 // 6. Set New Password Route
 router.post("/login/reset/new", validateResetPassForm, wrapAsync(userController.resetPassword));
+
+
+// Booked Trips Routes
+router.get("/booked-trips", isLoggedIn, userController.renderTrips);
+
+router.post("/listings/:id/book", isLoggedIn, wrapAsync(userController.addTrip));
+
 
 module.exports = router;
