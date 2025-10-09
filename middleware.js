@@ -1,4 +1,4 @@
-const Listing = require("./models/listing.js");
+const Listing = require("./models/resource.js");
 const Review = require("./models/review.js");
 
 // Middleware to check if the user is authenticated

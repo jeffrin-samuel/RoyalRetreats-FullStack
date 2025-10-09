@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center"><%= title %></h2>
+
+  <!-- Admission Form -->
+  <div class="card mb-4 shadow-sm p-4">
+    <form method="POST" action="/admission">
+      <div class="mb-3">
+        <label class="form-label">Patient Name</label>
+        <input type="text" class="form-control" name="name" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Age</label>
+        <input type="number" class="form-control" name="age" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Beds Required</label>
+        <input type="number" class="form-control" name="requiredBeds" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Admit Patient</button>
+    </form>
+  </div>
+
+  <!-- Admitted Patients List -->
+  <h3 class="mb-3">Admitted Patients</h3>
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Hospital</th>
+        <th>Beds Allocated</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% patients.forEach(p => { %>
+        <tr>
+          <td><%= p.name %></td>
+          <td><%= p.age %></td>
+          <td><%= p.hospital %></td>
+          <td><%= p.beds %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

@@ -3,52 +3,9 @@ require("dotenv").config();
 const User = require("../models/user.js");
 const mongoose = require("mongoose");
 
-const { sendResetPassword } = require("../utils/resetOtpEmail.js"); 
-const { sendWelcomeEmail } = require("../utils/welcomeEmail.js");
+const {sendWelcomeEmail} = require("../utils/welcomeEmail.js");
+const {sendResetPassword} = require("../utils/resetOtpEmail.js");
 
-// Add or remove listing from wishlist
-module.exports.Wishlists = async (req, res) => {
-    const listingId = req.params.id;
-
-    if (!req.user) {
-        req.flash("error", "User not found.");
-        return res.redirect(`/listings/${listingId}`);
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(listingId)) {
-        req.flash("error", "Invalid listing ID.");
-        return res.redirect(`/listings/${listingId}`);
-    }
-
-    const user = await User.findById(req.user._id);
-    if (!user) {
-        req.flash("error", "User not found.");
-        return res.redirect(`/listings/${listingId}`);
-    }
-
-    const index = user.wishlist.indexOf(listingId);
-
-    if (index === -1) {
-        user.wishlist.push(listingId);
-        req.flash("success", "Added to wishlist!");
-        await user.save();
-        return res.redirect(`/listings/${listingId}`);
-    } else {
-        user.wishlist.splice(index, 1);
-        req.flash("success", "Removed from wishlist.");
-        await user.save();
-        return res.redirect(`/listings/${listingId}`);
-    }
-};
-
-// Render Wishlist Page
-module.exports.renderWishlists = async (req, res) => {
-    const user = await User.findById(req.user._id).populate("wishlist");
-    if (!user) {
-        return res.render("users/wishlist.ejs", { allListings: [], message: "User not found" });
-    }
-    res.render("users/wishlist.ejs", { allListings: user.wishlist });
-};
 
 // Render Signup Form
 module.exports.renderSignupForm = (req, res) => {
@@ -58,9 +15,9 @@ module.exports.renderSignupForm = (req, res) => {
 // Signup Callback
 module.exports.signup = async (req, res) => {
     try {
-        let { username, email, password } = req.body;
+        let {username, email, password, hospitalId } = req.body;
 
-        const newUser = new User({ username, email });
+        const newUser = new User({username, email, hospitalId});
         const registeredUser = await User.register(newUser, password);
 
     /* Send welcome email only in non-production environments (eg. localhost) 
@@ -71,16 +28,12 @@ module.exports.signup = async (req, res) => {
 
         req.login(registeredUser, (err) => {
             if (err) return next(err);
-            req.flash("success", "Welcome to RoyalRetreats!");
-            res.redirect("/listings");
+            req.flash("success", "Welcome to MediTrack!");
+            res.redirect("/dashboard");
         });
     } catch (e) {
-        if (e.code === 11000) {
-            req.flash("error", "Email already registered.");
-        } else {
             req.flash("error", e.message);
-        }
-        res.redirect("/signup");
+            res.redirect("/signup");
     }
 };
 
@@ -91,8 +44,8 @@ module.exports.renderLoginForm = (req, res) => {
 
 // Login Callback
 module.exports.login = async (req, res) => {
-    req.flash("success", "Welcome back to RoyalRetreats!");
-    let redirectUrl = res.locals.redirectUrl || "/listings";
+    req.flash("success", "Welcome back to MediTrack!");
+    let redirectUrl = res.locals.redirectUrl || "/dashboard";
     res.redirect(redirectUrl);
 };
 
@@ -101,7 +54,7 @@ module.exports.logout = (req, res, next) => {
     req.logout((err) => {
         if (err) return next(err);
         req.flash("success", "Logged out successfully!");
-        res.redirect("/listings");
+        res.redirect("/dashboard");
     });
 };
 

@@ -1,0 +1,81 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center"><%= title %></h2>
+
+  <% if (error) { %>
+    <div class="alert alert-danger text-center"><%= error %></div>
+  <% } else { %>
+
+    <!-- Add Patient Form -->
+    <form action="/patients/add" method="POST" class="mb-4">
+      <div class="row g-2">
+        <div class="col">
+          <input type="text" name="patient_id" class="form-control" placeholder="Patient ID" required>
+        </div>
+        <div class="col">
+          <input type="text" name="doctor_id" class="form-control" placeholder="Doctor ID" required>
+        </div>
+        <div class="col">
+          <input type="date" name="appointment_date" class="form-control" required>
+        </div>
+        <div class="col">
+          <input type="time" name="appointment_time" class="form-control" required>
+        </div>
+        <div class="col">
+          <input type="text" name="reason_for_visit" class="form-control" placeholder="Reason" required>
+        </div>
+        <div class="col">
+          <select name="status" class="form-select" required>
+            <option value="Scheduled">Scheduled</option>
+            <option value="Completed">Completed</option>
+            <option value="No-show">No-show</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-success">Add</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Patients Table -->
+    <table class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Appointment ID</th>
+          <th>Patient ID</th>
+          <th>Doctor ID</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% patients.forEach(p => { %>
+          <tr>
+            <td><%= p.appointment_id %></td>
+            <td><%= p.patient_id %></td>
+            <td><%= p.doctor_id %></td>
+            <td><%= p.appointment_date %></td>
+            <td><%= p.appointment_time %></td>
+            <td><%= p.reason_for_visit %></td>
+            <td>
+              <span class="<%= p.status === 'Scheduled' ? 'text-primary' : p.status === 'Completed' ? 'text-success' : p.status === 'No-show' ? 'text-warning' : 'text-danger' %>">
+                <%= p.status %>
+              </span>
+            </td>
+            <td>
+              <form action="/patients/delete" method="POST" style="display:inline;">
+                <input type="hidden" name="appointment_id" value="<%= p.appointment_id %>">
+                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

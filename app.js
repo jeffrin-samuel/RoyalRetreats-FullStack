@@ -12,6 +12,26 @@ const ExpressError = require("./utils/ExpressError.js");
 const path = require("path");
 const dbUrl=process.env.ATLASDB_URL;
 
+
+const livereload = require('livereload');
+const connectLivereload = require('connect-livereload');
+const fs = require('fs');
+const csv = require('csv-parser');
+
+// ----- Create Express app -----
+
+// ----- LiveReload setup -----
+const liveReloadServer = livereload.createServer();
+liveReloadServer.watch(path.join(__dirname, 'public'));
+liveReloadServer.watch(path.join(__dirname, 'views'));
+app.use(connectLivereload());
+
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
+});
+
 const session = require("express-session");
 const MongoStore = require('connect-mongo');
 const flash = require("express-flash");
@@ -20,9 +40,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
 const User = require("./models/user.js");
-const Listing = require("./models/listing.js");
+const Listing = require("./models/resource.js");
 
-const listingRouter = require("./routes/listing.js");
+const resourceRouter = require("./routes/resource.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
@@ -71,6 +91,136 @@ const sessionOptions = {
 };
 
 
+let hospitals = [
+  { name: 'Fortis Hospital', beds: 20, oxygen: 12, doctors: 8 },
+  { name: 'KEM Hospital', beds: 5, oxygen: 4, doctors: 3 },
+  { name: 'Apollo Hospital', beds: 15, oxygen: 8, doctors: 6 },
+];
+
+let supplies = [
+  { name: 'Oxygen Cylinder', quantity: 50 },
+  { name: 'Beds', quantity: 30 },
+  { name: 'Blood Units', quantity: 20 },
+  { name: 'Paracetamol', quantity: 200 },
+];
+
+let admissions = [];      // Patients admitted via /admission form
+let patientsLocal = [];   // Patients loaded from CSV or added via /patients page
+
+// Temporary in-memory user for demo
+const users = [
+  { username: 'admin', password: 'admin123' } // In real app, hash passwords!
+];
+
+// ----- Load patients from CSV for Patient Management -----
+const csvFilePath = path.join(__dirname, 'data', 'patients.csv');
+if (fs.existsSync(csvFilePath)) {
+  fs.createReadStream(csvFilePath)
+    .pipe(csv())
+    .on('data', (row) => {
+      // Ensure numeric fields are numbers
+      row.age = Number(row.age) || 0;
+      row.beds = Number(row.beds) || 0;
+      // Generate appointment_id if missing
+      if (!row.appointment_id) {
+        row.appointment_id = `A${patientsLocal.length + 1}`;
+      }
+      patientsLocal.push(row);
+    })
+    .on('end', () => {
+      console.log('Patients CSV file successfully loaded');
+    });
+}
+
+// ----- Routes -----
+
+// Home page
+app.get('/', (req, res) => {
+  res.render('index', { title: 'MediTrack Home' });
+});
+
+// Dashboard
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard', { title: 'Dashboard', hospitals });
+});
+
+// ----- Admission Routes -----
+app.get('/admission', (req, res) => {
+  res.render('admission', { title: 'Patient Admission', patients: admissions, error: null });
+});
+
+app.post('/admission', (req, res) => {
+  const { name, age, requiredBeds } = req.body;
+  const bedsRequired = Number(requiredBeds);
+  const patientAge = Number(age);
+
+  // Find a hospital with enough beds
+  const hospital = hospitals.find(h => h.beds >= bedsRequired);
+
+  if (hospital) {
+    hospital.beds -= bedsRequired; // allocate beds
+    const patient = {
+      name,
+      age: patientAge,
+      hospital: hospital.name,
+      beds: bedsRequired
+    };
+    admissions.push(patient);
+    res.redirect('/admission');
+  } else {
+    res.render('admission', { title: 'Patient Admission', patients: admissions, error: 'No hospital has enough beds' });
+  }
+});
+
+// ----- Supply Routes -----
+app.get('/supply', (req, res) => {
+  res.render('supply', { title: 'Supply', supplies, error: null });
+});
+
+// ----- Login Routes -----
+app.get('/login', (req, res) => {
+  res.render('login', { title: 'Login', error: null });
+});
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find(u => u.username === username && u.password === password);
+
+  if (user) {
+    res.redirect('/dashboard');
+  } else {
+    res.render('login', { title: 'Login', error: 'Invalid username or password' });
+  }
+});
+
+// ----- Patient Management Routes -----
+app.get('/patients', (req, res) => {
+  res.render('patients', { title: 'Patient Management', patients: patientsLocal, error: null });
+});
+
+app.post('/patients/add', (req, res) => {
+  const newPatient = req.body;
+
+  // Generate appointment_id if missing
+  if (!newPatient.appointment_id) {
+    newPatient.appointment_id = `A${patientsLocal.length + 1}`;
+  }
+
+  newPatient.age = Number(newPatient.age) || 0;
+  newPatient.beds = Number(newPatient.beds) || 0;
+
+  patientsLocal.push(newPatient);
+  res.redirect('/patients');
+});
+
+app.post('/patients/delete', (req, res) => {
+  const { appointment_id } = req.body;
+  patientsLocal = patientsLocal.filter(p => p.appointment_id !== appointment_id);
+  res.redirect('/patients');
+});
+
+
+
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -89,7 +239,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/listings", listingRouter);
+app.use("/", resourceRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
@@ -115,7 +265,6 @@ async function main() {
 main().then(() => {
     console.log("Connected to DB");
 }).catch(err => console.log(err));
-
 
 const port = 8080;
 app.listen(port, () => {
