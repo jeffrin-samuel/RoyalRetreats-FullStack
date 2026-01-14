@@ -89,6 +89,12 @@ app.use((req, res, next) => {
     next();
 });
 
+// Health check route to keep the server and database active
+app.get("/health", async (req, res) => {
+    await mongoose.connection.db.admin().ping();
+    res.send("OK");
+});
+
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
