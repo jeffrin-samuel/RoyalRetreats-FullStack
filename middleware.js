@@ -26,6 +26,15 @@ module.exports.saveRedirectUrl = (req, res, next) => {
     next();
 };
 
+// Middleware to ensure the user has successfully verified OTP before accessing password reset routes
+module.exports.isOTPVerified = (req,res,next) => {
+    if(!req.session.resetUserId){
+      req.flash("error", "OTP Verification required!");
+      return res.redirect("/login/reset");
+    }
+    next();
+} 
+
 // Middleware to check if the logged-in user is the owner of the listing
 module.exports.isOwner = async (req, res, next) => {
     const { id } = req.params;

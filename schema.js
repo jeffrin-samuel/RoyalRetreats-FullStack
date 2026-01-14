@@ -33,7 +33,6 @@ module.exports.signUpSchema = Joi.object({
 
 // Reset Password Schema Validation
 module.exports.resetPasswordSchema = Joi.object({
-    email: Joi.string().email().required(),
     newPassword: Joi.string().min(6).required(),
     confirmPassword: Joi.string().required().valid(Joi.ref('newPassword'))
         .messages({ 'any.only': 'Passwords do not match' })

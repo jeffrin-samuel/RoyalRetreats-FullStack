@@ -152,6 +152,10 @@ module.exports.renderOtpForm = (req, res) => {
 module.exports.sendResetOtp = async (req, res) => {
     const { email } = req.body;
 
+    // Clear any existing password reset session state before starting a new OTP flow
+    if (req.session.resetUserId) delete req.session.resetUserId;
+
+
     try {
         const user = await User.findOne({ email });
         if (!user) {
@@ -196,16 +200,19 @@ module.exports.OTPVerify = async (req, res) => {
 
     try {
         const user = await User.findOne({ resetOtp: otp });
-        if (!user) {
-            req.flash("error", "User not found!");
-            return res.redirect("/login/reset");
+
+        if (!user) { // Invalid OTP (user existence was already validated during OTP request)
+          req.flash('error', 'Invalid OTP!');
+          return res.redirect('/login/reset/verify');
         }
 
-        if (user.resetOtp !== otp || user.resetOtpExpireAt < Date.now()) {
-            req.flash("error", "Invalid or expired OTP!");
-            return res.redirect("/login/reset/verify");
+        // Check if the OTP has expired
+        if (user.resetOtpExpireAt < Date.now()) {
+        req.flash('error', 'OTP has expired!');
+        return res.redirect('/login/reset/verify');
         }
-
+        
+        req.session.resetUserId = user._id; // Store OTP-verified user for password reset
         res.redirect("/login/reset/new");
     } catch (err) {
         console.error(err);
@@ -221,7 +228,7 @@ module.exports.renderNewPassForm = (req, res) => {
 
 // Reset Password
 module.exports.resetPassword = async (req, res) => {
-    const { newPassword, confirmPassword, email } = req.body;
+    const { newPassword, confirmPassword } = req.body;
 
     try {
         if (newPassword !== confirmPassword) {
@@ -229,7 +236,9 @@ module.exports.resetPassword = async (req, res) => {
             return res.redirect("/login/reset/new");
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findById(req.session.resetUserId); // User identity comes from session, not client input
+
+        // Safety check: user should exist after OTP verification
         if (!user) {
             req.flash("error", "User not found!");
             return res.redirect("/login/reset/new");
@@ -246,6 +255,8 @@ module.exports.resetPassword = async (req, res) => {
             user.resetOtpExpireAt = 0;
 
             await user.save();
+
+            delete req.session.resetUserId; // Clear OTP verification state after successful password reset
 
             req.flash("success", "Password reset successful! Please log in.");
             res.redirect("/login");

@@ -5,7 +5,7 @@ const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync");
 
 const passport = require("passport"); 
-const { saveRedirectUrl } = require("../middleware.js");
+const { saveRedirectUrl, isOTPVerified } = require("../middleware.js");
 const { isLoggedIn, isNotListingOwner } = require("../middleware.js");
 
 const userController = require("../controllers/user.js");
@@ -88,10 +88,10 @@ router.get("/login/reset/verify", userController.renderOTPVerify);
 router.post("/login/reset/verify", wrapAsync(userController.OTPVerify));
 
 // 5. Render New Password Form
-router.get("/login/reset/new", userController.renderNewPassForm);
+router.get("/login/reset/new", isOTPVerified, userController.renderNewPassForm);
 
 // 6. Set New Password Route
-router.post("/login/reset/new", validateResetPassForm, wrapAsync(userController.resetPassword));
+router.post("/login/reset/new", isOTPVerified, validateResetPassForm, wrapAsync(userController.resetPassword));
 
 
 // Booked Trips Routes
