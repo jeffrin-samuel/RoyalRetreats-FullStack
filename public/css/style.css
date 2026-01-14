@@ -98,6 +98,29 @@ body {
     display: flex;
 }
 
+/* Password input visibility toggle (eye icon) */
+.password-wrapper {
+  position: relative;
+}
+
+.password-input {
+  padding-right: 2.5rem;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #717171;
+  font-size: 1.1rem;
+}
+
+.toggle-password:hover {
+  color: #222222;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 600px) {

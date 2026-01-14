@@ -15,8 +15,25 @@
       <!-- Password -->
       <div class="mb-3"> 
         <label for="password" class="form-label">Password</label> 
-        <input id="password" name="password" type="password" class="form-control" minlength="6" required />
-        <div class="invalid-feedback">Password must be at least 6 characters long</div>
+
+        <div class="password-wrapper">
+          <input
+            id="password"
+            name="password"
+            type="password"
+            class="form-control password-input"
+            minlength="6"
+            required
+          />
+
+          <span class="toggle-password" data-target="password">
+            <i class="fa-regular fa-eye"></i>
+          </span>
+        </div>
+
+        <div class="invalid-feedback">
+          Password must be at least 6 characters long
+        </div>
 
         <div class="d-flex justify-content-end mt-1">
           <a href="/login/reset" class="text-decoration-none small text-primary">
