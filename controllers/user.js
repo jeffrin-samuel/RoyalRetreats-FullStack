@@ -207,9 +207,10 @@ module.exports.OTPVerify = async (req, res) => {
         }
 
         // Check if the OTP has expired
+        // OTP has expired — restart the password reset flow by redirecting the user to request a new OTP
         if (user.resetOtpExpireAt < Date.now()) {
-        req.flash('error', 'OTP has expired!');
-        return res.redirect('/login/reset/verify');
+        req.flash('error', 'OTP has expired. Please request a new one');
+        return res.redirect('/login/reset');
         }
         
         req.session.resetUserId = user._id; // Store OTP-verified user for password reset
