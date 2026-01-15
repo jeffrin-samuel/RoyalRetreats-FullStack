@@ -42,3 +42,19 @@
     }
   }
 </style>
+
+<script>
+  // Automatically dismiss flash messages after a short delay
+  // 4000ms → keep message visible for 4 seconds
+  // 500ms  → allow fade-out animation to complete before removing from DOM
+  setTimeout(() => {
+    document.querySelectorAll(".alert-msg").forEach(alert => {
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+
+      // Remove element after fade animation finishes
+      setTimeout(() => alert.remove(), 500);
+    });
+  }, 4000);
+</script>
+

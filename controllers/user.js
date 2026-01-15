@@ -174,7 +174,7 @@ module.exports.sendResetOtp = async (req, res) => {
    functionality becomes available or is tested locally. */
 
         if(process.env.NODE_ENV == "production"){
-          req.flash("error","User exists! OTP generated but email could not be sent due to server restrictions");
+          req.flash("error", "OTP generated! Email delivery is limited on the live demo");
           return res.redirect("/login/reset");
         }
 

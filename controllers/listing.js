@@ -225,14 +225,10 @@ module.exports.verifyPayment = async (req, res) => {
     await sendPaymentSuccessEmail(
       user.email,
       {
-        orderId: razorpay_order_id,
         paymentId: razorpay_payment_id,
         amount: listing.price * guests * nights * 100,
       },
-      {
-        name: listing.title,
-        location: listing.location,
-      },
+      listing,
       guests,
       startDate,
       endDate

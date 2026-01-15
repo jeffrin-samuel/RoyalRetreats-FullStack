@@ -22,6 +22,57 @@ user authentication/authorization, automated email notifications powered by Node
 
 ---
 
+## 🔐 Password Reset Flow (OTP-Based)
+
+RoyalRetreats includes a secure OTP-based password reset mechanism.
+
+### Flow Overview
+
+1. **Request OTP**
+   - User enters their registered email
+   - User existence is verified
+   - A 6-digit OTP is generated and stored with an expiry time
+
+2. **Verify OTP**
+   - User submits the OTP
+   - OTP validity and expiry are checked
+   - Successful verification allows access to reset password
+
+3. **Set New Password**
+   - User sets a new password
+   - Password is securely hashed using Passport
+   - OTP and verification session data are cleared after reset
+
+### Security Measures
+
+- OTP expires automatically after a fixed duration  
+- Password reset routes are protected using server-side session checks  
+- User identity is never trusted from client input  
+- OTP verification state is cleared after successful password update  
+
+---
+
+## 📧 Email Delivery Note (Live Demo)
+
+This project uses **Nodemailer** for sending:
+- Welcome emails
+- Password reset OTP emails
+- Booking confirmation emails
+
+### Live Deployment Limitation
+
+Due to **outbound SMTP port restrictions on Render’s free tier**, email delivery is limited in the live demo environment.
+
+- OTPs are generated correctly
+- Email sending may be restricted on the hosted demo
+- Clear UI messages are shown to indicate this limitation
+
+✅ Email functionality works fully in **local development environments**, where SMTP ports are unrestricted.
+
+This approach ensures transparent user communication while keeping the application behavior production-safe.
+
+---
+
 ## 💻 Tech Stack
 
 - Backend: Node.js, Express.js, MongoDB
